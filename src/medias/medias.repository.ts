@@ -24,10 +24,12 @@ export class MediasRepository {
   }
 
   findExistingMedia(title: string, username: string) {
-    return this.prisma.media.findFirst({
+    return this.prisma.media.findUnique({
       where: {
-        title: title,
-        username: username,
+        title_username: {
+          title, 
+          username
+        }
       },
     });
   }

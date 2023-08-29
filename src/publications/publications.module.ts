@@ -4,9 +4,11 @@ import { PublicationsController } from './publications.controller';
 import { PublicationsRepository } from './publications.repository';
 import { MediasService } from '../medias/medias.service';
 import { PostsService } from '../posts/posts.service';
+import { MediasModule } from '../medias/medias.module';
+import { PostsModule } from '../posts/posts.module';
 
 @Module({
-  imports: [MediasService, PostsService],
+  imports: [MediasModule, PostsModule],
   controllers: [PublicationsController],
   providers: [PublicationsService, PublicationsRepository],
 })

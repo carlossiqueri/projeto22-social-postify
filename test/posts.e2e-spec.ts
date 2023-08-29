@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
-describe('Medias test (e2e)', () => {
+describe('Posts test (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService = new PrismaService();
 
@@ -36,112 +36,96 @@ describe('Medias test (e2e)', () => {
       .expect("I'm okay!");
   });
 
-  it('POST /medias => should post a new media and return 201', async () => {
+  it('POST /posts => should post a new post and return 201', async () => {
     return request(app.getHttpServer())
-      .post('/medias')
+      .post('/posts')
       .send({
         title: 'test-title',
-        username: 'test-username',
+        text: 'test-text',
       })
       .expect(201);
   });
 
-  it('POST /medias => should return 400 if required fiels are missing', async () => {
+  it('POST /posts => should return 400 if required fiels are missing', async () => {
     return request(app.getHttpServer())
-      .post('/medias')
+      .post('/posts')
       .send({
-        username: 'test-username',
+        text: 'test-text',
       })
       .expect(400);
   });
 
-  it('POST /medias => should return 409 if combination of title and username already exists', async () => {
-    await prisma.media.create({
+  it('GET /posts => should return all posts', async () => {
+    await prisma.post.create({
       data: {
         title: 'test-title',
-        username: 'test-username',
+        text: 'test-text',
       },
     });
 
-    return request(app.getHttpServer())
-      .post('/medias')
-      .send({
-        title: 'test-title',
-        username: 'test-username',
-      })
-      .expect(409);
-  });
-
-  it('GET /medias => should return all medias', async () => {
-    await prisma.media.create({
-      data: {
-        title: 'test-title',
-        username: 'test-username',
-      },
-    });
-
-    const test = await request(app.getHttpServer()).get('/medias');
+    const test = await request(app.getHttpServer()).get('/posts');
     expect(test.statusCode).toBe(200);
     expect(test.body).toHaveLength(1);
   });
 
-  it('GET /medias => should return and empty array ([]) if there is no medias', async () => {
-    const test = await request(app.getHttpServer()).get('/medias');
+  it('GET /posts => should return and empty array ([]) if there is no posts', async () => {
+    const test = await request(app.getHttpServer()).get('/posts');
     expect(test.statusCode).toBe(200);
     expect(test.body).toHaveLength(0);
   });
 
-  it('GET /medias/:id => should return the correct media for the given id', async () => {
-    const testMedia = await prisma.media.create({
+  it('GET /posts/:id => should return the correct post for the given id', async () => {
+    const testPost = await prisma.post.create({
       data: {
         title: 'test-title',
-        username: 'test-username',
+        text: 'test-text',
       },
     });
 
     const test = await request(app.getHttpServer()).get(
-      `/medias/${testMedia.id}`,
+      `/posts/${testPost.id}`,
     );
     expect(test.statusCode).toBe(200);
     expect(test.body).toEqual({
       id: expect.any(Number),
+      image: null,
       title: 'test-title',
-      username: 'test-username',
+      text: 'test-text',
     });
   });
 
-  it('PUT /medias/:id => should update the correct media for the given id', async () => {
-    const createTestMedia = await prisma.media.create({
+  it('PUT /posts/:id => should update the correct media for the given id', async () => {
+    const createTestPost = await prisma.post.create({
       data: {
         title: 'test-title',
-        username: 'test-username',
+        text: 'test-text',
       },
     });
 
     const test = await request(app.getHttpServer())
-      .put(`/medias/${createTestMedia.id}`)
+      .put(`/posts/${createTestPost.id}`)
       .send({
-        title: 'update-test-title',
-        username: 'update-test-title',
+        title: 'updated-test-title',
+        text: 'updated-test-text',
       })
       .expect(200);
   });
 
-  it('DELETE /media/:id => should delete the correct media for the given id', async () => {
-    const createTestMedia = await prisma.media.create({
+  it('DELETE /posts/:id => should delete the correct media for the given id', async () => {
+    const createTestPost = await prisma.post.create({
       data: {
         title: 'test-title',
-        username: 'test-username',
+        text: 'test-text',
       },
     });
 
     const test = await request(app.getHttpServer())
-      .delete(`/medias/${createTestMedia.id}`)
+      .delete(`/posts/${createTestPost.id}`)
       .expect(200);
 
     // testing if it did indeed deleted the given media
 
-    const testMedia = await prisma.media.findMany();
-    expect(testMedia).toHaveLength(0);
+    const testPost = await prisma.post.findMany();
+    expect(testPost).toHaveLength(0);
   });
 });
