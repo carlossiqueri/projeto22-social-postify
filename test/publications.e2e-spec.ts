@@ -86,11 +86,12 @@ describe('Publications test (e2e)', () => {
         mediaId: createMediaTest.id,
         postId: createPostTest.id,
         date: date,
-      }
-    })
+      },
+    });
 
     const testPubli = await request(app.getHttpServer()).get('/publications');
-    expect(testPubli.statusCode).toBe(200)
+    expect(testPubli.statusCode).toBe(200);
     expect(testPubli.body).toHaveLength(1);
-  })
+  });
+
 });
