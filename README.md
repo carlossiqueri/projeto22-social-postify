@@ -46,7 +46,7 @@ Para instalar as dependências do projeto, siga os passos abaixo:
 
 Para rodar o aplicativo, siga os passos abaixo:
 
-1. No terminal, na pasta raiz do projeto, execute o seguinte comando: `npm run start`
+1. No terminal, na pasta raiz do projeto, execute o seguinte comando: `npm run start: dev`
 
 
 
