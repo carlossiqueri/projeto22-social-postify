@@ -27,6 +27,7 @@ Antes de usar o Social Postify, certifique-se de ter acesso à Internet e um nav
 ## Tecnologias Utilizadas
 
 - TypeScript
+- NodeJS
 - NestJS
 - Jest (para testes)
 - Express
