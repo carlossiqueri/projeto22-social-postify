@@ -36,4 +36,3 @@ lerna-debug.log*
 
 # Enviroment
 .env
-.env.test
